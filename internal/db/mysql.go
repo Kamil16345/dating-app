@@ -3,14 +3,20 @@ package mysql
 import (
 	"database/sql"
 	"fmt"
+	_ "github.com/go-sql-driver/mysql"
+	"log"
 )
 
-func ConnectDB() (*sql.DB, error) {
-	db, err := sql.Open("mysql", "root:admin@tcp(127.0.0.1:3306)/")
+func ConnectDB() *sql.DB {
+	db, err := sql.Open("mysql", "root:admin@tcp(localhost:3306)/dating_app")
 	if err != nil {
-		return nil, err
+		log.Fatal(err)
 	}
-	defer db.Close()
-	fmt.Println("Success, connected to DB!")
-	return db, nil
+
+	if err = db.Ping(); err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("Successfully connected to the database!")
+	return db
 }
